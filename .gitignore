@@ -1,0 +1,17 @@
+# Secrets
+.env
+.env.*
+
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+
+# Database
+*.db
+*.sqlite3
+
+#Test and Editor files
+.pytest_cache/
+.vscode/

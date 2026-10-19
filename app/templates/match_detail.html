@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Match Details | Cricket Live</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', path='/css/style.css') }}"
+    >
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>🏏 Cricket Live</h1>
+            <a class="back-link" href="/">← All Matches</a>
+        </div>
+    </header>
+
+    <main class="container detail-container">
+        {% if error %}
+            <div class="message">{{ error }}</div>
+        {% endif %}
+
+        <section class="detail-card">
+            <span class="badge">
+                {{ match.matchType or match.match_type or "Match" }}
+            </span>
+
+            <h2>{{ match.name }}</h2>
+
+            <p class="venue">
+                📍 {{ match.venue or "Venue unavailable" }}
+            </p>
+
+            <p class="status-large">
+                {{ match.status or "Status unavailable" }}
+            </p>
+
+            {% set teams = match.teams or [] %}
+
+            {% if teams %}
+                <h3>Teams</h3>
+
+                <div class="team-grid">
+                    {% for team in teams %}
+                        <div class="team-box">
+                            🏏 {{ team }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+            {% set scores = match.scores or [] %}
+
+            <h3>Scorecard Summary</h3>
+
+            {% if scores %}
+                <div class="scores detail-scores">
+                    {% for item in scores %}
+                        <div class="score-row">
+                            <strong>
+                                {{ item.inning or "Innings" }}
+                            </strong>
+
+                            <span>
+                                {{ item.r or 0 }}/{{ item.w or 0 }}
+                            </span>
+
+                            <span>
+                                {{ item.o or 0 }} overs
+                            </span>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="muted">
+                    Detailed scorecard is not available for this match.
+                </p>
+            {% endif %}
+
+            <p class="muted">
+                Date: {{ match.date or match.match_date or "Not available" }}
+            </p>
+        </section>
+    </main>
+</body>
+</html>

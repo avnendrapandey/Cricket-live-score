@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cricket Live Score</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', path='/css/style.css') }}"
+    >
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>🏏 Cricket Live</h1>
+            <p>Live scores and match information</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="section-heading">
+            <h2>Available Matches</h2>
+            <button onclick="location.reload()">Refresh</button>
+        </section>
+
+        {% if error %}
+            <div class="message">{{ error }}</div>
+        {% endif %}
+
+        {% if matches %}
+            <div class="match-grid">
+                {% for match in matches %}
+                    <a
+                        class="match-card"
+                        href="/match/{{ match.id }}"
+                    >
+                        <div class="match-top">
+                            <span class="badge">
+                                {{ match.matchType or match.match_type or "Match" }}
+                            </span>
+
+                            <span class="status">
+                                {{ match.status or "Status unavailable" }}
+                            </span>
+                        </div>
+
+                        <h3>
+                            {{ match.name }}
+                        </h3>
+
+                        <p class="venue">
+                            📍 {{ match.venue or "Venue unavailable" }}
+                        </p>
+
+                        {% set scores = match.scores or [] %}
+
+                        {% if scores %}
+                            <div class="scores">
+                                {% for item in scores %}
+                                    <p>
+                                        <strong>
+                                            {{ item.inning or "Innings" }}
+                                        </strong>
+                                        <span>
+                                            {{ item.r or 0 }}/{{ item.w or 0 }}
+                                            ({{ item.o or 0 }} overs)
+                                        </span>
+                                    </p>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <p class="muted">
+                                Score details not available
+                            </p>
+                        {% endif %}
+
+                        <div class="view-link">
+                            View Match Details →
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <h3>No matches available</h3>
+                <p>
+                    The provider may not currently have any matches
+                    available. Try refreshing later.
+                </p>
+            </div>
+        {% endif %}
+    </main>
+
+    <footer>
+        <p>Cricket Live Score · Data provided by CricketData API</p>
+    </footer>
+</body>
+</html>
